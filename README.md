@@ -48,6 +48,9 @@ RTIAssist solves all 4 problems in one tool — for free, in seconds.
 | 📋 **RTI Tracker** | Save, track, and manage all your filed RTIs locally |
 | 🔗 **WhatsApp Share** | Share RTI draft directly via WhatsApp |
 | 📄 **PDF Download** | Download RTI draft as PDF |
+| ⭐ **User Feedback** | 5-star rating + comment form (Formspree) in Settings |
+| ❓ **Help & Support** | FAQ accordion + contact options in Settings |
+| 🔒 **Privacy Policy** | Full privacy policy modal in Settings |
 | 🐳 **Docker Ready** | One-command deployment on any platform |
 
 ---
