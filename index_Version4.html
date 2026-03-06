@@ -61,11 +61,22 @@ h1 .teal{color:var(--green-l);}
 .step.done{background:var(--green-l);}
 .card-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;}
 
-/* LANG SELECTOR */
-.lang-btns{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.3rem;}
-.lbtn{background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:8px;padding:.3rem .7rem;font-size:.77rem;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;}
-.lbtn:hover{border-color:rgba(255,107,0,.3);color:var(--saffron-l);}
-.lbtn.sel{background:rgba(255,107,0,.1);border-color:var(--saffron);color:var(--saffron-l);}
+/* LANG MODAL */
+.lang-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:500;align-items:center;justify-content:center;}
+.lang-modal-overlay.show{display:flex;animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.lang-modal{background:var(--navy-mid);border:1px solid rgba(255,107,0,.25);border-radius:20px;padding:2rem;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.lang-modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:.4rem;}
+.lang-modal-sub{font-size:.83rem;color:var(--muted);margin-bottom:1.5rem;}
+.lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1.5rem;}
+.lbtn{background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:10px;padding:.55rem .3rem;font-size:.85rem;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;text-align:center;}
+.lbtn:hover{border-color:rgba(255,107,0,.4);color:var(--saffron-l);background:rgba(255,107,0,.06);}
+.lbtn.sel{background:rgba(255,107,0,.12);border-color:var(--saffron);color:var(--saffron-l);font-weight:600;}
+.lang-modal-actions{display:flex;gap:.8rem;}
+.lang-confirm-btn{flex:1;background:linear-gradient(135deg,var(--saffron),var(--saffron-l));color:white;border:none;border-radius:10px;padding:.8rem;font-size:.95rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.lang-confirm-btn:hover{opacity:.9;}
+.lang-cancel-btn{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:.8rem 1.2rem;font-size:.9rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.lang-cancel-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2);}
 
 label{display:block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:.5rem;}
 textarea,select,input[type=text],input[type=date]{width:100%;background:rgba(255,255,255,.04);border:1.5px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;color:white;font-family:'DM Sans',sans-serif;font-size:.92rem;transition:all .2s;outline:none;}
@@ -603,24 +614,6 @@ footer{position:relative;z-index:1;padding:3rem 3rem 2rem;border-top:1px solid v
       <div class="card-title">Generate Your RTI Application</div>
     </div>
 
-    <!-- LANGUAGE -->
-    <div class="form-group">
-      <label data-translate="form.langLabel">Document Language</label>
-      <div class="lang-btns" id="langBtns">
-        <button class="lbtn sel" onclick="selLang(this,'english')">English</button>
-        <button class="lbtn" onclick="selLang(this,'hindi')">हिंदी</button>
-        <button class="lbtn" onclick="selLang(this,'marathi')">मराठी</button>
-        <button class="lbtn" onclick="selLang(this,'tamil')">தமிழ்</button>
-        <button class="lbtn" onclick="selLang(this,'telugu')">తెలుగు</button>
-        <button class="lbtn" onclick="selLang(this,'kannada')">ಕನ್ನಡ</button>
-        <button class="lbtn" onclick="selLang(this,'bengali')">বাংলা</button>
-        <button class="lbtn" onclick="selLang(this,'gujarati')">ગુજરાતી</button>
-        <button class="lbtn" onclick="selLang(this,'punjabi')">ਪੰਜਾਬੀ</button>
-        <button class="lbtn" onclick="selLang(this,'malayalam')">മലയാളം</button>
-        <button class="lbtn" onclick="selLang(this,'odia')">ଓଡ଼ିଆ</button>
-      </div>
-    </div>
-
     <span class="ex-lbl">💡 Quick examples — click to fill:</span>
     <div class="chips">
       <div class="chip" onclick="setEx('ration')">🍚 Ration Card</div>
@@ -680,7 +673,7 @@ footer{position:relative;z-index:1;padding:3rem 3rem 2rem;border-top:1px solid v
       </div>
     </div>
 
-    <button class="submit-btn" id="submitBtn" onclick="generateRTI()">
+    <button class="submit-btn" id="submitBtn" onclick="showLangModal()">
       <div class="spinner"></div>
       <span class="btn-text">⚡ Generate RTI Application — Free</span>
     </button>
@@ -1928,13 +1921,32 @@ function toggleMobileMenu(){
 }
 
 // ══════════════════════════════════════════════
-// LANGUAGE SELECTION
+// LANGUAGE MODAL
 // ══════════════════════════════════════════════
 let selLangVal = 'english';
+
 function selLang(btn, lang){
-  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.lang-grid .lbtn').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   selLangVal = lang;
+}
+
+function showLangModal(){
+  const desc = document.getElementById('description').value.trim();
+  if(!desc || desc.length < 20){
+    showError('Please describe your problem in at least 20 characters.');
+    return;
+  }
+  document.getElementById('langModal').classList.add('show');
+}
+
+function closeLangModal(){
+  document.getElementById('langModal').classList.remove('show');
+}
+
+function confirmLangAndGenerate(){
+  closeLangModal();
+  generateRTI();
 }
 
 // ══════════════════════════════════════════════
@@ -2842,5 +2854,30 @@ async function generateLabourComplaint(){
 <script src="legal_examples.js"></script>
 <!-- UI Translations -->
 <script src="ui_translations.js"></script>
+
+<!-- LANGUAGE SELECTION MODAL -->
+<div class="lang-modal-overlay" id="langModal" onclick="if(event.target===this)closeLangModal()">
+  <div class="lang-modal">
+    <div class="lang-modal-title">🌐 Draft Language / ड्राफ्ट की भाषा चुनें</div>
+    <div class="lang-modal-sub">Your problem is understood. Now choose the language for your RTI draft.</div>
+    <div class="lang-grid">
+      <button class="lbtn sel" onclick="selLang(this,'english')">🇬🇧 English</button>
+      <button class="lbtn" onclick="selLang(this,'hindi')">🇮🇳 हिंदी</button>
+      <button class="lbtn" onclick="selLang(this,'marathi')">मराठी</button>
+      <button class="lbtn" onclick="selLang(this,'tamil')">தமிழ்</button>
+      <button class="lbtn" onclick="selLang(this,'telugu')">తెలుగు</button>
+      <button class="lbtn" onclick="selLang(this,'kannada')">ಕನ್ನಡ</button>
+      <button class="lbtn" onclick="selLang(this,'bengali')">বাংলা</button>
+      <button class="lbtn" onclick="selLang(this,'gujarati')">ગુજરાતી</button>
+      <button class="lbtn" onclick="selLang(this,'punjabi')">ਪੰਜਾਬੀ</button>
+      <button class="lbtn" onclick="selLang(this,'malayalam')">മലയാളം</button>
+      <button class="lbtn" onclick="selLang(this,'odia')">ଓଡ଼ିଆ</button>
+    </div>
+    <div class="lang-modal-actions">
+      <button class="lang-cancel-btn" onclick="closeLangModal()">← Back</button>
+      <button class="lang-confirm-btn" onclick="confirmLangAndGenerate()">⚡ Generate RTI Draft</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
