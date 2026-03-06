@@ -78,7 +78,16 @@ h1 .teal{color:var(--green-l);}
 .lang-cancel-btn{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:.8rem 1.2rem;font-size:.9rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
 .lang-cancel-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2);}
 
-label{display:block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:.5rem;}
+/* TIPS BOX */
+.tips-box{background:rgba(0,168,107,.07);border:1px solid rgba(0,168,107,.25);border-radius:12px;padding:.9rem 1.1rem;margin-top:.6rem;}
+.tips-box-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+.tips-box-title{font-size:.78rem;font-weight:600;color:var(--green-l);letter-spacing:.04em;}
+.tips-chevron{font-size:.7rem;color:var(--green-l);transition:transform .2s;}
+.tips-chevron.open{transform:rotate(180deg);}
+.tips-list{margin-top:.7rem;display:none;}
+.tips-list.show{display:block;}
+.tips-list li{font-size:.78rem;color:rgba(255,255,255,.65);margin-bottom:.35rem;padding-left:.2rem;line-height:1.5;}
+.tips-list li span{color:var(--green-l);font-weight:600;}
 textarea,select,input[type=text],input[type=date]{width:100%;background:rgba(255,255,255,.04);border:1.5px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;color:white;font-family:'DM Sans',sans-serif;font-size:.92rem;transition:all .2s;outline:none;}
 textarea{min-height:115px;resize:vertical;line-height:1.65;}
 textarea:focus,select:focus,input:focus{border-color:var(--saffron);background:rgba(255,107,0,.04);box-shadow:0 0 0 3px rgba(255,107,0,.08);}
@@ -630,6 +639,20 @@ footer{position:relative;z-index:1;padding:3rem 3rem 2rem;border-top:1px solid v
     <div class="form-group">
       <label data-translate="form.descLabel">Describe what information you need</label>
       <textarea id="description" data-translate="form.descPlaceholder" placeholder="Example: My ration card application was rejected 3 months ago in Maharashtra and I want to know the exact reason, who rejected it, and see the complete file noting..."></textarea>
+      <!-- TIPS BOX -->
+      <div class="tips-box">
+        <div class="tips-box-header" onclick="toggleTips()">
+          <span class="tips-box-title">💡 Better description = stronger RTI &mdash; click for tips</span>
+          <span class="tips-chevron" id="tipsChevron">▼</span>
+        </div>
+        <ul class="tips-list" id="tipsList">
+          <li><span>📍 State name likho</span> &mdash; "Maharashtra mein", "Delhi ke" (auto-detect hoga)</li>
+          <li><span>📅 Dates likho</span> &mdash; "3 months pehle", "January 2025 mein apply kiya"</li>
+          <li><span>🔢 Numbers likho</span> &mdash; Application number, file number, case number agar pata ho</li>
+          <li><span>👤 Officer name</span> &mdash; Kisi officer ne kuch bola ho toh unka naam mention karo</li>
+          <li><span>❓ Specific poochho</span> &mdash; "Rejection ka reason", "kis officer ne reject kiya", "kab decision hua"</li>
+          <li><span>📋 Problem clearly batao</span> &mdash; Jitna zyada context, utne specific questions AI banayega</li>
+      </div>
     </div>
 
     <div class="form-row">
@@ -1947,6 +1970,16 @@ function closeLangModal(){
 function confirmLangAndGenerate(){
   closeLangModal();
   generateRTI();
+}
+
+// ══════════════════════════════════════════════
+// TIPS BOX TOGGLE
+// ══════════════════════════════════════════════
+function toggleTips(){
+  const list = document.getElementById('tipsList');
+  const chevron = document.getElementById('tipsChevron');
+  list.classList.toggle('show');
+  chevron.classList.toggle('open');
 }
 
 // ══════════════════════════════════════════════
