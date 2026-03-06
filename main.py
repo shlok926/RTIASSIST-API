@@ -29,7 +29,9 @@ async def _build_telegram_app():
         start, help_cmd, about, fee, state_cmd, legal_cmd,
         button_callback, handle_message, myreminders_cmd
     )
-    app = Application.builder().token(TELEGRAM_TOKEN).updater(None).build()
+    # Use AiohttpRequest — better DNS resolution than default httpx in containers
+    from telegram.request import AiohttpRequest
+    app = Application.builder().token(TELEGRAM_TOKEN).request(AiohttpRequest()).updater(None).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_cmd))
     app.add_handler(CommandHandler("about", about))
