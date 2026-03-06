@@ -1,3 +1,12 @@
+---
+title: RTIAssist API
+emoji: 🏛️
+colorFrom: blue
+colorTo: green
+sdk: docker
+pinned: false
+---
+
 <div align="center">
 
 <img src="rtiassist_logo.png" alt="RTIAssist Logo" width="300"/>
