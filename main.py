@@ -16,69 +16,62 @@ logger = logging.getLogger(__name__)
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "")
 WEBHOOK_PATH = "/telegram"
 _telegram_app = None
+_telegram_init_lock = asyncio.Lock()
+_telegram_initialized = False
 
 
-async def _register_webhook():
-    """Register webhook with Telegram — called after initialize() succeeds."""
-    space_host = os.getenv("SPACE_HOST", "")
-    webhook_url = f"https://{space_host}{WEBHOOK_PATH}" if space_host else os.getenv("WEBHOOK_URL", "")
-    if not webhook_url:
-        logger.warning("WEBHOOK_URL not configured — bot inactive")
-        return
-    try:
-        await _telegram_app.bot.set_webhook(url=webhook_url, drop_pending_updates=True)
-        logger.info(f"Telegram webhook set: {webhook_url}")
-    except Exception as e:
-        logger.error(f"Webhook registration failed: {e}")
+async def _build_telegram_app():
+    from telegram.ext import (
+        Application, CommandHandler, MessageHandler,
+        filters, CallbackQueryHandler
+    )
+    from telegram_bot import (
+        start, help_cmd, about, fee, state_cmd, legal_cmd,
+        button_callback, handle_message, myreminders_cmd
+    )
+    app = Application.builder().token(TELEGRAM_TOKEN).updater(None).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("help", help_cmd))
+    app.add_handler(CommandHandler("about", about))
+    app.add_handler(CommandHandler("fee", fee))
+    app.add_handler(CommandHandler("state", state_cmd))
+    app.add_handler(CommandHandler("legal", legal_cmd))
+    app.add_handler(CommandHandler("myreminders", myreminders_cmd))
+    app.add_handler(CallbackQueryHandler(button_callback))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    return app
 
 
-async def _setup_telegram():
-    """Initialize Telegram bot in background with retries — never blocks startup."""
-    global _telegram_app
-    if not TELEGRAM_TOKEN:
-        return
-    try:
-        from telegram.ext import (
-            Application, CommandHandler, MessageHandler,
-            filters, CallbackQueryHandler
-        )
-        from telegram_bot import (
-            start, help_cmd, about, fee, state_cmd, legal_cmd,
-            button_callback, handle_message, myreminders_cmd
-        )
-        # Build app and add handlers (no network needed)
-        app = Application.builder().token(TELEGRAM_TOKEN).updater(None).build()
-        app.add_handler(CommandHandler("start", start))
-        app.add_handler(CommandHandler("help", help_cmd))
-        app.add_handler(CommandHandler("about", about))
-        app.add_handler(CommandHandler("fee", fee))
-        app.add_handler(CommandHandler("state", state_cmd))
-        app.add_handler(CommandHandler("legal", legal_cmd))
-        app.add_handler(CommandHandler("myreminders", myreminders_cmd))
-        app.add_handler(CallbackQueryHandler(button_callback))
-        app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-
-        # Retry initialize() until network is available
-        for attempt in range(1, 11):
-            try:
-                await app.initialize()
-                await app.start()
-                _telegram_app = app  # Only set AFTER successful initialize
-                logger.info("✅ Telegram bot initialized successfully")
-                await _register_webhook()
-                return
-            except Exception as e:
-                logger.warning(f"Telegram init attempt {attempt}/10 failed: {e}")
-                await asyncio.sleep(attempt * 5)
-        logger.error("All Telegram init attempts failed")
-    except Exception as e:
-        logger.error(f"Telegram setup failed: {e}")
+async def _get_telegram_app():
+    """Lazy-initialize telegram app on first webhook call."""
+    global _telegram_app, _telegram_initialized
+    if _telegram_initialized:
+        return _telegram_app
+    async with _telegram_init_lock:
+        if _telegram_initialized:
+            return _telegram_app
+        try:
+            app = await _build_telegram_app()
+            await app.initialize()
+            await app.start()
+            _telegram_app = app
+            _telegram_initialized = True
+            logger.info("✅ Telegram bot initialized successfully (lazy)")
+            # Register webhook
+            space_host = os.getenv("SPACE_HOST", "")
+            webhook_url = f"https://{space_host}{WEBHOOK_PATH}" if space_host else os.getenv("WEBHOOK_URL", "")
+            if webhook_url:
+                await app.bot.set_webhook(url=webhook_url, drop_pending_updates=False)
+                logger.info(f"Webhook set: {webhook_url}")
+        except Exception as e:
+            logger.error(f"Telegram lazy init failed: {e}")
+            _telegram_initialized = False  # Allow retry next request
+    return _telegram_app
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    asyncio.create_task(_setup_telegram())  # Run in background — don't block startup
-    yield
+    yield  # Nothing to do at startup — bot initializes lazily
     if _telegram_app:
         await _telegram_app.stop()
         await _telegram_app.shutdown()
@@ -159,14 +152,17 @@ def health():
 @app.post("/telegram", include_in_schema=False)
 async def telegram_webhook(request: Request):
     """Receive updates from Telegram (webhook mode)."""
-    if not _telegram_app:
-        logger.warning("Telegram update received but bot not initialized")
+    if not TELEGRAM_TOKEN:
         return Response(status_code=200)
     try:
         from telegram import Update
         data = await request.json()
-        update = Update.de_json(data, _telegram_app.bot)
-        await _telegram_app.process_update(update)
+        bot_app = await _get_telegram_app()
+        if bot_app:
+            update = Update.de_json(data, bot_app.bot)
+            await bot_app.process_update(update)
+        else:
+            logger.warning("Telegram update received but bot not ready yet")
     except Exception as e:
         logger.error(f"Error processing Telegram update: {e}")
     return Response(status_code=200)
