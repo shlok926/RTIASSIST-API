@@ -15,10 +15,25 @@ def generate_draft(intent: dict, pio_info: dict, language: str = "english") -> s
     Returns:
         Full RTI application text as a string (with placeholder fields)
     """
+    LANGUAGE_MAP = {
+        "hindi":     "Hindi (Devanagari script — हिन्दी)",
+        "marathi":   "Marathi (Devanagari script — मराठी)",
+        "tamil":     "Tamil (Tamil script — தமிழ்)",
+        "telugu":    "Telugu (Telugu script — తెలుగు)",
+        "kannada":   "Kannada (Kannada script — ಕನ್ನಡ)",
+        "bengali":   "Bengali (Bengali script — বাংলা)",
+        "gujarati":  "Gujarati (Gujarati script — ગુજરાતી)",
+        "punjabi":   "Punjabi (Gurmukhi script — ਪੰਜਾਬੀ)",
+        "malayalam": "Malayalam (Malayalam script — മലയാളം)",
+        "odia":      "Odia (Odia script — ଓଡ଼ିଆ)",
+        "english":   "formal English",
+    }
+    lang_key = language.lower().strip()
+    lang_name = LANGUAGE_MAP.get(lang_key, "formal English")
     language_instruction = (
-        "Draft the application in Hindi (Devanagari script)."
-        if language.lower() == "hindi"
-        else "Draft the application in formal English."
+        f"IMPORTANT: You MUST write the ENTIRE application in {lang_name}. "
+        f"Every word — including the heading, addressee block, subject line, body, "
+        f"and closing — must be in {lang_name}. Do NOT use English unless the language itself is English."
     )
 
     user_message = f"""
@@ -44,8 +59,8 @@ Draft a complete, ready-to-file RTI application now.
     draft = call_asi1(
         system_prompt=DRAFT_GENERATOR,
         user_message=user_message,
-        temperature=0.4,  # Slightly higher for natural legal language variation
-        max_tokens=1200,
+        temperature=0.3,
+        max_tokens=2500,
     )
 
     return draft

@@ -1860,7 +1860,7 @@ footer{position:relative;z-index:1;padding:3rem 3rem 2rem;border-top:1px solid v
 // ══════════════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════════════
-const API_BASE = 'http://localhost:7860';
+const API_BASE = 'https://visgrow-03-rtiassist-api.hf.space';
 
 const STATE_PORTALS = {
   '':{ name:'RTI Online — Central Govt', url:'https://rtionline.gov.in', desc:'Official Central Government RTI portal' },
@@ -2018,7 +2018,7 @@ async function generateRTI(){
 
     const res = await fetch(`${API_BASE}/rti/generate`, {
       method:'POST',
-      headers:{'Content-Type':'application/json','ngrok-skip-browser-warning':'true'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({description:desc, language:selLangVal, state:state||null})
     });
 
@@ -2034,7 +2034,7 @@ async function generateRTI(){
     renderResult(data, state);
 
   } catch(e){
-    showError('Error: '+e.message+'. Make sure your RTIAssist server is running and ngrok is active.');
+    showError('Error: '+e.message+'. Please try again in a moment.');
     document.getElementById('s1').classList.remove('done');
     document.getElementById('s2').classList.remove('active');
   } finally {

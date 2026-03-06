@@ -89,11 +89,14 @@ Use placeholder fields in [SQUARE_BRACKETS] for:
 - [PAYMENT_REFERENCE]
 
 Rules:
-- Use formal legal language
+- CRITICAL: Write the ENTIRE application in the language specified in the user message. Do not mix languages.
+- Use formal legal language appropriate to the specified language
 - Be specific — vague requests get rejected
+- The numbered information points must be detailed and exhaustive (minimum 5-7 points)
 - Do NOT ask for opinions or recommendations (RTI only covers recorded information)
 - Do NOT ask for information exempt under Section 8 (national security, cabinet papers, personal info of others, etc.)
 - Keep each information point as a separate numbered item
+- Include a full, properly formatted application — do not truncate or summarise
 - Return ONLY the application text, no JSON, no explanation
 """
 
