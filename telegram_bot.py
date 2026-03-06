@@ -448,7 +448,7 @@ async def generate_rti(msg_obj, context, user_text, state, user_name, draft_lang
                 "description": user_text,
                 "language": draft_lang,
                 "state": api_state,
-                "demo_mode": os.getenv("DEMO_MODE", "false").lower() == "true"
+                "demo_mode": False  # Always use real AI — never demo for actual users
             },
             timeout=60
         )
