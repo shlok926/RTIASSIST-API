@@ -384,8 +384,14 @@ Enclosures:
 async def generate_rti(request: RTIRequest):
     try:
         # ── DEMO MODE: Return instant sample response ─────────────
-        # Respect global DEMO_MODE env var OR per-request flag
-        if _GLOBAL_DEMO or request.demo_mode:
+        # Per-request demo_mode=False explicitly disables demo even if server has DEMO_MODE=true
+        # Per-request demo_mode=True forces demo even if server has DEMO_MODE=false
+        # Per-request demo_mode=None (not set) → use server's _GLOBAL_DEMO
+        if request.demo_mode is None:
+            use_demo = _GLOBAL_DEMO
+        else:
+            use_demo = request.demo_mode
+        if use_demo:
             return get_demo_response(request)
         # ── Layer 1: Classify intent ──────────────────────────────────
         intent = classify_intent(request.description)

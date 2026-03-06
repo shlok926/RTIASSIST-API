@@ -12,16 +12,16 @@ class RTIRequest(BaseModel):
     )
     language: str = Field(
         default="english",
-        description="Language for the RTI draft: 'english' or 'hindi'",
+        description="Language for the RTI draft: english, hindi, marathi, tamil, telugu, kannada, bengali, gujarati, punjabi, malayalam, odia",
     )
     state: Optional[str] = Field(
         default=None,
         description="State name if filing a state-level RTI. Leave blank for Central Government.",
         example="Maharashtra",
     )
-    demo_mode: bool = Field(
-        default=False,
-        description="Enable demo mode for instant sample responses without API calls",
+    demo_mode: Optional[bool] = Field(
+        default=None,
+        description="Set true for instant demo response, false to force real AI, omit to use server default.",
     )
 
 
