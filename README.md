@@ -38,12 +38,16 @@ RTIAssist solves all 4 problems in one tool — for free, in seconds.
 | Feature | Description |
 |---------|-------------|
 | 🤖 **4-Layer AI Pipeline** | Intent → PIO Resolver → Draft → Quality Check |
-| 🌐 **11 Indian Languages** | Hindi, English, Tamil, Telugu, Kannada, Bengali + more |
-| 📱 **Telegram Bot** | Full RTI + Legal tools via Telegram |
+| 🌐 **11 Indian Languages** | Hindi, English, Tamil, Telugu, Kannada, Bengali, Gujarati, Marathi, Punjabi, Malayalam, Odia |
+| 📱 **Telegram Bot** | Full RTI + Legal tools via Telegram, webhook mode |
 | ⚖️ **Legal Tools** | Consumer Court, Legal Notice, Labour Complaint, Second Appeal |
 | 💡 **Legal Examples Library** | 44 real-world examples with prefilled forms |
 | 🎯 **Quality Score** | 0–100 score + exemption risk analysis |
-| 🆓 **Demo Mode** | Works without API key for testing |
+| 🔔 **Deadline Alerts** | Bell icon with in-app alerts + browser push notifications |
+| 🤖 **Telegram Reminders** | Bot sends deadline reminders 7 days & 1 day before deadline |
+| 📋 **RTI Tracker** | Save, track, and manage all your filed RTIs locally |
+| 🔗 **WhatsApp Share** | Share RTI draft directly via WhatsApp |
+| 📄 **PDF Download** | Download RTI draft as PDF |
 | 🐳 **Docker Ready** | One-command deployment on any platform |
 
 ---
@@ -94,15 +98,11 @@ cp .env.example .env
 ### 3. Run
 
 ```bash
-# API Server (port 7860)
+# API Server + Bot (port 7860) — bot runs in webhook mode inside the API
 python app.py
 
-# Telegram Bot (separate terminal)
-python telegram_bot.py
-
-# Website (port 8080)
-python -m http.server 8080
-# Open: http://localhost:8080/index_Version4.html
+# Website — just open the HTML file directly in any browser
+# index_Version4.html — no server needed, fully self-contained
 ```
 
 ---
@@ -182,10 +182,16 @@ Interactive docs available at **`/docs`** (Swagger UI) when server is running.
 
 **Bot Commands:**
 ```
-/start   — Start the bot and choose language
-/help    — How to use RTIAssist
-/about   — About this tool
+/start        — Start the bot and choose language
+/help         — How to use RTIAssist
+/about        — About this tool
+/fee          — RTI filing fees for all states
+/state        — Select your state
+/legal        — Legal tools (Consumer, Appeal, etc.)
+/myreminders  — View your active RTI deadline reminders
 ```
+
+**Telegram Reminders:** After saving an RTI to the tracker on the website, click **"Set Reminder →"** — bot will automatically remind you 7 days and 1 day before the response deadline.
 
 ---
 
@@ -286,11 +292,12 @@ Contributions are welcome! Here's how:
 
 ## 🔮 Future Scope
 
-- RTI Status Tracker via registered post number
-- WhatsApp Bot integration
+- RTI Status Tracker via registered post number (auto-fetch from India Post)
 - Verified PIO directory for 700+ Central Government departments
 - Android/iOS mobile app
 - OCR — scan rejection letters and auto-draft appeals
+- Persistent Telegram reminders with database backend
+- WhatsApp Bot integration
 
 ---
 
