@@ -69,11 +69,11 @@ RTIAssist solves all these problems in one tool — **free**, in **your language
 
 ## 🖼️ Screenshots
 
-> Website running at `http://localhost:8080/index_Version4.html`
-
 | RTI Generator | Legal Tools | Telegram Bot |
 |:---:|:---:|:---:|
 | *(coming soon)* | *(coming soon)* | *(coming soon)* |
+
+> Screenshots will be added after public launch. Live demo: [shlok926.github.io/rtiassist-api](https://shlok926.github.io/rtiassist-api)
 
 ---
 
@@ -313,14 +313,17 @@ Contributions are welcome! Here's how:
 
 ## 🔮 Future Scope
 
-- RTI Status Tracker via registered post number (auto-fetch from India Post)
-- Verified PIO directory for 700+ Central Government departments
-- Android/iOS mobile app
-- OCR — scan rejection letters and auto-draft appeals
-- Persistent Telegram reminders with database backend
-- WhatsApp Bot integration
-- **Gram Panchayat Complaint** — MNREGA funds misused? Road/nali not built? File formal complaint to District Collector
-- **Tender Objection (CVC)** — Government tender irregularity? File CVC complaint + RTI for tender documents combo
+| Priority | Feature | Status |
+|----------|---------|--------|
+| 🔴 High | **Supabase Persistent Storage** — Reminders + user preferences saved permanently across bot restarts | Planned |
+| 🔴 High | **Screenshots in README** — Live screenshots of RTI Generator, Legal Tools, Telegram Bot | Planned |
+| 🟡 Medium | RTI Status Tracker via registered post number (auto-fetch from India Post) | Planned |
+| 🟡 Medium | Verified PIO directory for 700+ Central Government departments | Planned |
+| 🟡 Medium | OCR — scan rejection letters and auto-draft appeals | Planned |
+| 🟡 Medium | WhatsApp Bot integration | Planned |
+| 🟢 Low | Android/iOS mobile app | Future |
+| 🟢 Low | **Gram Panchayat Complaint** — MNREGA funds misused? Road/nali not built? File formal complaint to District Collector | Future |
+| 🟢 Low | **Tender Objection (CVC)** — Government tender irregularity? File CVC complaint + RTI for tender documents combo | Future |
 
 ---
 
