@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="80" fill="#0A1628"/>
+  
+  <!-- Saffron glow top left -->
+  <radialGradient id="g1" cx="25%" cy="20%" r="55%">
+    <stop offset="0%" stop-color="#FF6B00" stop-opacity="0.18"/>
+    <stop offset="100%" stop-color="#FF6B00" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="512" height="512" rx="80" fill="url(#g1)"/>
+  
+  <!-- Green glow bottom right -->
+  <radialGradient id="g2" cx="80%" cy="80%" r="50%">
+    <stop offset="0%" stop-color="#006B3F" stop-opacity="0.18"/>
+    <stop offset="100%" stop-color="#006B3F" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="512" height="512" rx="80" fill="url(#g2)"/>
+
+  <!-- Pillars / Court building -->
+  <!-- Base platform -->
+  <rect x="80" y="340" width="352" height="28" rx="6" fill="#FF6B00" opacity="0.9"/>
+  <!-- Steps -->
+  <rect x="100" y="368" width="312" height="14" rx="4" fill="#D4A017" opacity="0.7"/>
+  <rect x="120" y="382" width="272" height="12" rx="4" fill="#D4A017" opacity="0.5"/>
+
+  <!-- Pillars -->
+  <rect x="108" y="190" width="30" height="152" rx="5" fill="#1E3A5F"/>
+  <rect x="108" y="190" width="30" height="152" rx="5" fill="url(#pg)"/>
+  <rect x="178" y="190" width="30" height="152" rx="5" fill="#1E3A5F"/>
+  <rect x="178" y="190" width="30" height="152" rx="5" fill="url(#pg)"/>
+  <rect x="248" y="190" width="30" height="152" rx="5" fill="#1E3A5F"/>
+  <rect x="248" y="190" width="30" height="152" rx="5" fill="url(#pg)"/>
+  <rect x="318" y="190" width="30" height="152" rx="5" fill="#1E3A5F"/>
+  <rect x="318" y="190" width="30" height="152" rx="5" fill="url(#pg)"/>
+  <rect x="374" y="190" width="30" height="152" rx="5" fill="#1E3A5F"/>
+  <rect x="374" y="190" width="30" height="152" rx="5" fill="url(#pg)"/>
+
+  <linearGradient id="pg" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#FF6B00" stop-opacity="0.15"/>
+    <stop offset="50%" stop-color="#ffffff" stop-opacity="0.05"/>
+    <stop offset="100%" stop-color="#FF6B00" stop-opacity="0.05"/>
+  </linearGradient>
+
+  <!-- Roof / Pediment -->
+  <polygon points="256,110 68,190 444,190" fill="#112240"/>
+  <polygon points="256,110 68,190 444,190" fill="none" stroke="#FF6B00" stroke-width="2.5" opacity="0.7"/>
+  <!-- Roof fill gradient -->
+  <linearGradient id="roofg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#FF6B00" stop-opacity="0.12"/>
+    <stop offset="100%" stop-color="#FF6B00" stop-opacity="0"/>
+  </linearGradient>
+  <polygon points="256,110 68,190 444,190" fill="url(#roofg)"/>
+
+  <!-- Star / emblem on pediment -->
+  <circle cx="256" cy="163" r="14" fill="none" stroke="#D4A017" stroke-width="2" opacity="0.8"/>
+  <text x="256" y="169" text-anchor="middle" font-size="14" fill="#D4A017" opacity="0.9">★</text>
+
+  <!-- RTI text -->
+  <text x="256" y="468" 
+        text-anchor="middle" 
+        font-family="Georgia, serif" 
+        font-size="72" 
+        font-weight="900" 
+        letter-spacing="8"
+        fill="white">RTI</text>
+  
+  <!-- Saffron underline under RTI -->
+  <rect x="148" y="476" width="216" height="4" rx="2" fill="#FF6B00"/>
+
+  <!-- "ASSIST" small text -->
+  <text x="256" y="502" 
+        text-anchor="middle" 
+        font-family="Georgia, serif" 
+        font-size="22" 
+        font-weight="400"
+        letter-spacing="12"
+        fill="#FF8C3A"
+        opacity="0.85">ASSIST</text>
+
+  <!-- Tricolor stripe on top (subtle) -->
+  <rect x="80" y="86" width="116" height="3" rx="1.5" fill="#FF6B00" opacity="0.6"/>
+  <rect x="198" y="86" width="116" height="3" rx="1.5" fill="white" opacity="0.3"/>
+  <rect x="316" y="86" width="116" height="3" rx="1.5" fill="#006B3F" opacity="0.6"/>
+</svg>
