@@ -1,5 +1,4 @@
 
-https://github.com/shlok926/rtiassist-api/blob/main/README.md
 <div align="center">
 
 <img src="https://raw.githubusercontent.com/shlok926/rtiassist-api/main/rtiassist_logo.png" alt="RTIAssist Logo" width="300"/>
